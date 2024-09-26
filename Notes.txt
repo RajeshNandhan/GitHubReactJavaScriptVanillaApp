@@ -1,3 +1,35 @@
+REACT
+
+https://www.youtube.com/watch?v=SqcY0GlETPk
+
+https://www.youtube.com/watch?v=bMknfKXIFA8
+
+https://www.youtube.com/watch?v=lAFbKzO-fss&t=1s
+
+KEY
+
+useState, useRef, useEffect, fetch, asyn&await
+
+CURRENT
+https://www.youtube.com/watch?v=RVFAyFWO4go
+6;02
+
+
+JavaScript Higher Order Functions
+https://www.geeksforgeeks.org/javascript-higher-order-functions/
+
+* 1. Higher-order function approach involves passing a function (callback) as an argument to another function
+* 2. Higher-order functions can also return new functions as return value.
+* 3. It does not mutate the original value
+
 Step 1 - create new react app
 
 npx create-react-app my-react-app
+
+Step 2 -
+
+cd my-react-app
+
+Step 2 -
+
+npm start

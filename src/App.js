@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './shared/Header';
+import Footer from './shared/Footer';
+import BookList from './books/BookList';
+import PersonList from './persons/PersonList';
+import Nav from './shared/Nav';
+import { useState } from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import BookEdit from './books/BookEdit';
+import Home from './home/home';
 
 function App() {
+
+  const [search, setSearch] = useState('');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+          <Header />
+          <Nav search={search} setSearch={setSearch}/>
+          <Routes>
+            <Route exact path="/book"  element={<BookList/>}/>
+            <Route exact path="/book/:id"  element={<BookEdit/>}/>
+            <Route exact path="/person" element={<PersonList/>}/>
+            <Route path="*" element={<Home/>}/>
+          </Routes>
+          <Footer />
+      </div>
+    </Router>
   );
 }
 

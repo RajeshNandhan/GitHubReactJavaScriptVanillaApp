@@ -12,7 +12,7 @@ useState, useRef, useEffect, fetch, asyn&await
 
 CURRENT
 https://www.youtube.com/watch?v=RVFAyFWO4go
-6;02
+7:57
 
 
 JavaScript Higher Order Functions
@@ -33,3 +33,13 @@ cd my-react-app
 Step 2 -
 
 npm start
+
+
+
+---------------------------------
+
+REACT VISUAL STUDIO CODE EXTEMTION
+
+Ctrl + ALt + R
+
+rafce - create a arrow function with ES7

@@ -76,11 +76,12 @@ footer {
   place-content: center;
 }
 
-.bookEditForm {
+.bookEditForm, .personEditForm {
   width: 80%;
 }
 
-.bookEditForm input[type="text"], .bookEditForm button, .bookEditForm label {
+.bookEditForm input[type="text"], .bookEditForm button, .bookEditForm label, 
+.personEditForm input[type="text"], .personEditForm button, .personEditForm label{
   font-family: 'Open Sans', sans-serif;
   width: 100%;
   min-height: 48px;

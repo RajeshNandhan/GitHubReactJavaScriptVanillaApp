@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import apiRequest from "../shared/apiRequest";
 import { FaSave, FaBackspace } from "react-icons/fa";
+import fetchPut from "../shared/apiFetch/fetchPut";
 
 const BookEdit = () => {
 
     const { id } = useParams();
-    const API_URL = 'http://localhost:5102/api/Book';
+    const API_URL = 'http://localhost:5102/api/book';
     const [bookSelected, setBookSelected] = useState([]);
     const navigate = useNavigate();
 
@@ -46,24 +46,15 @@ const BookEdit = () => {
     };
 
     const handleSaveClick = async () => {
-
-        const updateOptions = {
-            method: 'PUT',
-            headers:  { 'Content-Type': 'application/json' },
-            body: JSON.stringify(bookSelected) 
-          }
-    
-          const updateRequestUrl = `${API_URL}/${id}`;
-          const result = await apiRequest(updateRequestUrl, updateOptions);
-
-          if(result) {
+        const updateRequestUrl = `${API_URL}/${id}`;
+        const result = await fetchPut(updateRequestUrl, bookSelected);
+        
+        if(result) {
             console.log(result)
             //setFetchError(err.message);
-          } else {
-            
+        } else {
             navigate('/book');
-            //return <Redirect to='/login'  />
-          }
+        }
     };
 
     const handleCancelClick = (e) => {

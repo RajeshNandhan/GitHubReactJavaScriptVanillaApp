@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import apiRequest from '../shared/apiRequest';
 import { Link } from 'react-router-dom';
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
+import fetchDelete from '../shared/apiFetch/fetchDelete';
+import fetchGet from '../shared/apiFetch/fetchGet';
 
-const BookList = () => {
+const BookList = (search) => {
 
-    const API_URL = 'http://localhost:5102/api/Book';
+    const API_URL = 'http://localhost:5102/api/book';
     const [items, setItems] = useState([]);
     //const [fetchError, setFetchError] = useState(null);
 
@@ -13,11 +14,7 @@ const BookList = () => {
 
         const fetchItems = async () => {
           try {
-            const response = await fetch(API_URL);
-            if (!response.ok) 
-              throw Error('Did not receive expected data');
-
-            const listItems = await response.json();
+            const listItems = await fetchGet(API_URL)
             setItems(listItems);
             console.log(listItems)
           } catch (err) {
@@ -34,22 +31,16 @@ const BookList = () => {
     }, [])
 
     const handleDelete = async (bookId) => {
-      const deleteOptions = {
-        method: 'DELETE',
-      }
-
       const deleteRequestUrl = `${API_URL}/${bookId}`;
-      const result = await apiRequest(deleteRequestUrl,deleteOptions);
+      const result = await fetchDelete(deleteRequestUrl);
 
       if(result) {
         console.log(result)
       } else{
         const newItems = items.filter(item => item.bookId !== bookId);
-        setItems(newItems);//NOT WORKING YET
+        setItems(newItems);
         console.log(newItems);
       }
-     
-      //history.push('/');
     }
     
     return (

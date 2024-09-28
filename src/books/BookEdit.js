@@ -9,61 +9,49 @@ const BookEdit = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const API_URL = 'http://localhost:5102/api/book';
+
     const {bookItems, setBookItems} = useContext(BookDataContext);
     const selectedBook = bookItems.find(item => (item.bookId).toString() === id);
 
-    const [bookItem, setBookItem] = useState(null);
     const [bookEditError, setBookEditError] = useState(null);
+    //BOOK Individual property
+    const [editBookName, setEditBookName] = useState('');
+    const [editBookCategory, setEditBookCategory] = useState('');
+    const [editEdition, setEditEdition] = useState('');
+    const [editPrice, setEditPrice] = useState('');
+    const [editImage, setEditImage] = useState('');
 
-    //console.log(selectedBook)
-
-    // useEffect(() => {
-    //     const fetchItems = async () => {
-    //         try {
-    //             const response = await fetch(`${API_URL}/${id}`);
-
-    //             if (!response.ok) 
-    //                 throw Error('Did not receive expected data');
-
-    //             const responseValue = await response.json();
-    //             setBookSelected(responseValue);
-    //             console.log(responseValue)
-    //         } catch (err) {
-    //             //setFetchError(err.message);
-    //             console.log(err)
-    //         } finally {
-    //             //setIsLoading(false);
-    //         }
-    //     }
-
-    //     //setTimeout(() => fetchItems(), 2000);
-    //     fetchItems();
-
-    // }, [])
-
-
+    //UPDATE BOOK Individual property with useState based on selectedBook
+    //Triggers On Load
     useEffect(() => {
         if (selectedBook) {
-            setBookItem(selectedBook)
+            setEditBookName(selectedBook.bookName);
+            setEditBookCategory(selectedBook.bookCategory);
+            setEditEdition(selectedBook.edition);
+            setEditPrice(selectedBook.price);
+            setEditImage(selectedBook.image);
+            console.log('Call on useEffect to set values')
         }
-    }, [selectedBook])
-
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setBookItem(prev => ({
-            ...prev,
-            // [name]: type === 'checkbox' ? checked : value
-            [name]: value
-        }));
-    };
+    }, [selectedBook, setEditBookName, setEditBookCategory, setEditEdition, setEditPrice, setEditImage])
 
     const handleSaveClick = async () => {
         setBookEditError(null);
+        //RECREATE BOOK FOR Update 
+        //First create a copy of untouched selectedBook 
+        //Second Update properties of copied object with useState Value
+        let updatedBook = JSON.parse(JSON.stringify(selectedBook));
+        updatedBook.bookName = editBookName;
+        updatedBook.bookCategory = editBookCategory;
+        updatedBook.edition = editEdition;
+        updatedBook.price = editPrice;
+        updatedBook.image = editImage;
+        //console.log(selectedBook, updatedBook);
+
         const updateRequestUrl = `${API_URL}/${id}`;
         try {
-            await fetchPut(updateRequestUrl, bookItem);
-            setBookItems(bookItems.map(post => post.bookId === bookItem.bookId ? { ...bookItem } : post));
-            setBookItem(null);
+            await fetchPut(updateRequestUrl, updatedBook);
+            setBookItems(bookItems.map(post => post.bookId === updatedBook.bookId ? { ...updatedBook } : post));
+            resetSelectedBookForEMpty();
             navigate('/book');
         } catch(err){
             //console.log('--> Call to handleSaveClick with catch err');
@@ -72,14 +60,22 @@ const BookEdit = () => {
     };
 
     const handleCancelClick = (e) => {
-        setBookItem(null);
+        resetSelectedBookForEMpty();
         navigate('/book');
     };
+
+    const resetSelectedBookForEMpty = () => {
+        setEditBookName('');
+        setEditBookCategory('');
+        setEditEdition('');
+        setEditPrice('');
+        setEditImage('');
+    }
 
     return (
         <main>
             {bookEditError && <p className="statusMsg" style={{ color: "red" }}>{bookEditError}</p>}
-            {bookItem ? (
+            {selectedBook ? (
                 <form className="bookEditForm" onSubmit={(e) => { e.preventDefault();}}>
                     <table>
                         <tbody>
@@ -88,39 +84,39 @@ const BookEdit = () => {
                                     <label htmlFor="bookName">Name</label>
                                 </td>
                                 <td>
-                                    <input name="bookName" type="text" value = {bookItem.bookName} onChange={handleChange}/>
+                                    <input name="bookName" type="text" required value={editBookName} onChange={(e) => setEditBookName(e.target.value)}/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                Category
+                                <label htmlFor="bookCategory">Category</label>
                                 </td>
                                 <td>
-                                    <input name="bookCategory"  type="text" value = {bookItem.bookCategory} onChange={handleChange}/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Edition
-                                </td>
-                                <td>
-                                    <input name="edition"  type="text" value = {bookItem.edition} onChange={handleChange}/>
+                                    <input name="bookCategory" type="text" required value={editBookCategory} onChange={(e) => setEditBookCategory(e.target.value)}/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    Price
+                                <label htmlFor="edition">Edition</label>
                                 </td>
                                 <td>
-                                    <input name="price"  type="text" value = {bookItem.price} onChange={handleChange}/>
+                                    <input name="edition" type="text" required value={editEdition} onChange={(e) => setEditEdition(e.target.value)}/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    Image
+                                <label htmlFor="price">Price</label>
                                 </td>
                                 <td>
-                                    <input name="image"  type="text" value = {bookItem.image} onChange={handleChange}/>
+                                    <input name="price" type="text" required value={editPrice} onChange={(e) => setEditPrice(e.target.value)}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <label htmlFor="image">Image</label>
+                                </td>
+                                <td>
+                                    <input name="image" type="text" required value={editImage} onChange={(e) => setEditImage(e.target.value)}/>
                                 </td>
                             </tr>
                             <tr className="item">

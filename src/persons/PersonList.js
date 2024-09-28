@@ -1,56 +1,35 @@
 import { format } from 'date-fns';
-import { useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import axiosBase from '../shared/apiAxios/axiosBase';
 import { Link } from 'react-router-dom';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import PersonDataContext from '../shared/context/PersonDataContext';
 
 const PersonList = () => {
 
     const API_URL = 'http://localhost:5102/api/person';
-    const [items, setItems] = useState([]);
-    //const [fetchError, setFetchError] = useState(null);
-
-    useEffect(() => {
-
-        const fetchItems = async () => {
-          try {
-            const response = await axiosBase.get(API_URL);
-            setItems(response.data);
-            console.log(response.data)
-            //setFetchError(null);
-          } catch (err) {
-            //setFetchError(err.message);
-            console.log(err)
-          } finally {
-            //setIsLoading(false);
-          }
-        }
-    
-        //setTimeout(() => fetchItems(), 2000);
-        fetchItems();
-    
-    }, [])
+    const { personItems, setPersonItems, personFetchError, setPersonFetchError,
+        isPersonLoading, setIsPersonLoading} = useContext(PersonDataContext);
+    const [personDeleteError, setPersonDeleteError] = useState(null);
 
     const handleDelete = async (personId) => {
-      debugger
+      setPersonDeleteError(null);
       try {
         const deleteRequestUrl = `${API_URL}/${personId}`;
         await axiosBase.delete(deleteRequestUrl);
-        const newItems = items.filter(item => item.personId !== personId);
-        setItems(newItems);
-        console.log(newItems);
-        //setFetchError(null);
+        const newItems = personItems.filter(item => item.personId !== personId);
+        setPersonItems(newItems);
       } catch (err) {
-        //setFetchError(err.message);
-        console.log(err)
-      } finally {
-        //setIsLoading(false);
+        setPersonDeleteError(err.message);
       }
     }
 
     return (
         <main>
-           {items.length ? (
+           {personDeleteError && <p className="statusMsg" style={{ color: "red" }}>{personDeleteError}</p>}
+           {isPersonLoading && <p className="statusMsg">Loading persons data...</p>}
+           {!isPersonLoading && personFetchError && <p className="statusMsg" style={{ color: "red" }}>{personFetchError}</p>}
+           {!isPersonLoading && !personFetchError && personItems && (
                 <table>
                 <thead>
                     <tr>
@@ -64,7 +43,7 @@ const PersonList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.map((item) => (
+                    {personItems.map((item) => (
                     <tr className="item" key={item.id}>
                         <td><span>{item.firstName}</span> , <span>{item.lastName}</span></td>
                         <td>{item.rank}</td>
@@ -82,8 +61,6 @@ const PersonList = () => {
                     ))}
                 </tbody>
                 </table>
-            ) : (
-                <p style={{ marginTop: '2rem' }}>Your list is empty.</p>
             )}
         </main>
     )

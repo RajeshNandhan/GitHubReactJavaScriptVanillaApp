@@ -1,39 +1,31 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaSave, FaBackspace } from "react-icons/fa";
 import axiosBase from "../shared/apiAxios/axiosBase";
+import PersonDataContext from '../shared/context/PersonDataContext';
 
 const PersonEdit = () => {
     const { id } = useParams();
     const API_URL = 'http://localhost:5102/api/person';
-    const [personSelected, setPersonSelected] = useState([]);
     const navigate = useNavigate();
+    const {personItems, setPersonItems} = useContext(PersonDataContext);
+    const selectedPerson = personItems.find(item => (item.personId).toString() === id);
+    //
+    const [personItem, setPersonItem] = useState(null);
+    const [personEditError, setPersonEditError] = useState(null);
 
+    /*Update personItem when selectedPerson has a valid data for the ID param*/
     useEffect(() => {
-
-        const fetchItems = async () => {
-            
-            try {
-                const getRequestUrl = `${API_URL}/${id}`;
-                const response = await axiosBase.get(getRequestUrl);
-                setPersonSelected(response.data);
-                console.log(response.data)
-            } catch (err) {
-                //setFetchError(err.message);
-                console.log(err)
-            } finally {
-                //setIsLoading(false);
-            }
+        if (selectedPerson) {
+            // setEditTitle(post.title);
+            // setEditBody(post.body);
+            setPersonItem(selectedPerson);
         }
-
-        //setTimeout(() => fetchItems(), 2000);
-        fetchItems();
-
-    }, [])
+    }, [selectedPerson])
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setPersonSelected(prev => ({
+        setPersonItem(prev => ({
             ...prev,
             // [name]: type === 'checkbox' ? checked : value
             [name]: value
@@ -41,20 +33,39 @@ const PersonEdit = () => {
     };
 
     const handleSaveClick = async () => {
+        setPersonEditError(null);
         try {
+            //console.log('--> Call to handleSaveClick to call axiosBase.put');
             const updateRequestUrl = `${API_URL}/${id}`;
-            const result = await axiosBase.put(updateRequestUrl, personSelected);
-            console.log(result.data)
-        } catch (err) {
-            //setFetchError(err.message);
-            console.log(err)
-        } finally {
-            //setIsLoading(false);
+            await axiosBase.put(updateRequestUrl, personItem);
+            setPersonItems(personItems.map(post => post.personId === personItem.personId ? { ...personItem } : post));
+            setPersonItem(null)
             navigate('/person');
+        } catch (err) {
+            //console.log('--> Call to handleSaveClick with catch err');
+            setPersonEditError(err.message);
         }
     };
 
-    
+    // const handleSaveClick = async () => {
+    //     const updateRequestUrl = `${API_URL}/${id}`;
+    //     const result = await fetchPut(updateRequestUrl, bookItem);
+
+    //     const result = await axiosBase.put(updateRequestUrl, personItem);
+        
+    //     if(result) {
+    //         console.log(result)
+    //         //setFetchError(err.message);
+    //     } else {
+    //         //setBookItems(posts.map(post => post.bookId === id ? { ...response.data } : post));
+    //         setPersonItems(personItems.map(post => post.personId === personItem.personId ? { ...personItem } : post));
+    //         setPersonItem(null)
+    //         console.log('rajesh')
+    //         // console.log(bookItems)
+    //         // console.log(bookItem)
+    //         navigate('/person');
+    //     }
+    // };
 
 
     // const handleEdit = async (id) => {
@@ -74,75 +85,76 @@ const PersonEdit = () => {
 
 
     const handleCancelClick = (e) => {
-        e.preventDefault();
-        console.log(e)
+        setPersonItem(null);
         navigate('/person');
     };
 
     return (
-        <main>{personSelected ? (
-            <form className="personEditForm" onSubmit={(e) => { e.preventDefault();}}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <label htmlFor="firstName">First Name</label>
-                            </td>
-                            <td>
-                                <input name="firstName" type="text" value = {personSelected.firstName} onChange={handleChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Last Name
-                            </td>
-                            <td>
-                                <input name="lastName"  type="text" value = {personSelected.lastName} onChange={handleChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Rank
-                            </td>
-                            <td>
-                                <input name="rank"  type="text" value = {personSelected.rank} onChange={handleChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Category
-                            </td>
-                            <td>
-                                <input name="category"  type="text" value = {personSelected.category} onChange={handleChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Date of Birth
-                            </td>
-                            <td>
-                                <input name="dateOfBirth" readOnly  type="text" value = {personSelected.dateOfBirth} onChange={handleChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Play Cricket?
-                            </td>
-                            <td>
-                                <input name="isPlayCricket"  readOnly type="text" value = {personSelected.isPlayCricket} onChange={handleChange}/>
-                            </td>
-                        </tr>
-                        <tr className="item">
-                            <td style={{columnSpan : 2}}>
-                                <FaBackspace role='button' onClick={handleCancelClick} 
-                                    tabIndex="1" name="Cancel" title="Press to Cancel"/>
-                                <FaSave role='button' onClick={handleSaveClick} tabIndex="0" 
-                                    name="Save" title="Press to Save changes"/>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
+        <main>
+            {personEditError && <p className="statusMsg" style={{ color: "red" }}>{personEditError}</p>}
+            {personItem ? (
+                <form className="personEditForm" onSubmit={(e) => { e.preventDefault();}}>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label htmlFor="firstName">First Name</label>
+                                </td>
+                                <td>
+                                    <input name="firstName" type="text" value = {personItem.firstName} onChange={handleChange}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Last Name
+                                </td>
+                                <td>
+                                    <input name="lastName"  type="text" value = {personItem.lastName} onChange={handleChange}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Rank
+                                </td>
+                                <td>
+                                    <input name="rank"  type="text" value = {personItem.rank} onChange={handleChange}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Category
+                                </td>
+                                <td>
+                                    <input name="category"  type="text" value = {personItem.category} onChange={handleChange}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Date of Birth
+                                </td>
+                                <td>
+                                    <input name="dateOfBirth" readOnly  type="text" value = {personItem.dateOfBirth} onChange={handleChange}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Play Cricket?
+                                </td>
+                                <td>
+                                    <input name="isPlayCricket"  readOnly type="text" value = {personItem.isPlayCricket} onChange={handleChange}/>
+                                </td>
+                            </tr>
+                            <tr className="item">
+                                <td style={{columnSpan : 2}}>
+                                    <FaBackspace role='button' onClick={handleCancelClick} 
+                                        tabIndex="1" name="Cancel" title="Press to Cancel"/>
+                                    <FaSave role='button' onClick={handleSaveClick} tabIndex="0" 
+                                        name="Save" title="Press to Save changes"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
          ): (
             <p style={{ marginTop: '2rem' }}>Your list is empty.</p>
         )}</main>

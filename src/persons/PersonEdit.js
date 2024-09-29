@@ -17,12 +17,12 @@ const PersonEdit = () => {
     /*Update personItem when selectedPerson has a valid data for the ID param*/
     useEffect(() => {
         if (selectedPerson) {
-            // setEditTitle(post.title);
-            // setEditBody(post.body);
             setPersonItem(selectedPerson);
         }
     }, [selectedPerson])
 
+    //Data binding of UI with Model taken care
+    //Individual property of PersonItem is updated from UI change
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setPersonItem(prev => ({
@@ -36,6 +36,7 @@ const PersonEdit = () => {
         setPersonEditError(null);
         try {
             //console.log('--> Call to handleSaveClick to call axiosBase.put');
+            //const datetime = format(new Date(), 'MMMM dd, yyyy pp');
             const updateRequestUrl = `${API_URL}/${id}`;
             await axiosBase.put(updateRequestUrl, personItem);
             setPersonItems(personItems.map(post => post.personId === personItem.personId ? { ...personItem } : post));
@@ -46,43 +47,6 @@ const PersonEdit = () => {
             setPersonEditError(err.message);
         }
     };
-
-    // const handleSaveClick = async () => {
-    //     const updateRequestUrl = `${API_URL}/${id}`;
-    //     const result = await fetchPut(updateRequestUrl, bookItem);
-
-    //     const result = await axiosBase.put(updateRequestUrl, personItem);
-        
-    //     if(result) {
-    //         console.log(result)
-    //         //setFetchError(err.message);
-    //     } else {
-    //         //setBookItems(posts.map(post => post.bookId === id ? { ...response.data } : post));
-    //         setPersonItems(personItems.map(post => post.personId === personItem.personId ? { ...personItem } : post));
-    //         setPersonItem(null)
-    //         console.log('rajesh')
-    //         // console.log(bookItems)
-    //         // console.log(bookItem)
-    //         navigate('/person');
-    //     }
-    // };
-
-
-    // const handleEdit = async (id) => {
-    //     const datetime = format(new Date(), 'MMMM dd, yyyy pp');
-    //     const updatedPost = { id, title: editTitle, datetime, body: editBody };
-    //     try {
-    //         const response = await api.put(`/posts/${id}`, updatedPost);
-    //         setPosts(posts.map(post => post.id === id ? { ...response.data } : post));
-    //         setEditTitle('');
-    //         setEditBody('');
-    //         history.push('/');
-    //     } catch (err) {
-    //         console.log(`Error: ${err.message}`);
-    //     }
-    // }
-
-
 
     const handleCancelClick = (e) => {
         setPersonItem(null);

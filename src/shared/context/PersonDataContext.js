@@ -9,6 +9,8 @@ export const PersonDataProvider = ({ children }) => {
     const [personItems, setPersonItems] = useState([]);
     const [personFetchError, setPersonFetchError] = useState(null);
     const [isPersonLoading, setIsPersonLoading] = useState(false);
+    const [search, setSearch] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
 
     useEffect(() => {
         setIsPersonLoading(true);
@@ -34,31 +36,33 @@ export const PersonDataProvider = ({ children }) => {
     }, []);
 
 
-    // const [search, setSearch] = useState('');
-    // const [searchResults, setSearchResults] = useState([]);
-
     //const { data, fetchError, isLoading } = useAxiosFetch('http://localhost:3500/posts');
 
-    // useEffect(() => {
-    //     setPosts(data);
-    // }, [])
+    /*this useEffect is effective only when search and personItems available
+      search is set by PersonSearch component via setSearch
+      here personItems is filtered based on search and value updated to setSearchResults
+      setSearchResults is actually used in UI*/
+    
+    useEffect(() => {
+        
+        const results = personItems?.filter((person) =>
+          ((person.category).toLowerCase()).includes(search.toLowerCase())
+          || ((person.firstName).toLowerCase()).includes(search.toLowerCase())
+          || ((person.category).toLowerCase()).includes(search.toLowerCase())
+        );
 
-    // useEffect(() => {
-    //     const filteredResults = posts.filter((post) =>
-    //         ((post.body).toLowerCase()).includes(search.toLowerCase())
-    //         || ((post.title).toLowerCase()).includes(search.toLowerCase()));
+        setSearchResults(results);
+        //console.log(results)
 
-    //     setSearchResults(filteredResults.reverse());
-    // }, [posts, search])
+    }, [personItems, search])
 
     return (
         <PersonDataContext.Provider value={{
-            // search, setSearch,
-            // searchResults, fetchError, isLoading,
-            // posts, setPosts
             personItems, setPersonItems,
             personFetchError, setPersonFetchError,
-            isPersonLoading, setIsPersonLoading
+            isPersonLoading, setIsPersonLoading,
+            search, setSearch,
+            searchResults, setSearchResults
         }}>
             {children}
         </PersonDataContext.Provider>

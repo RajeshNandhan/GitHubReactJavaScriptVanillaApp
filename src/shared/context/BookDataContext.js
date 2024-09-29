@@ -9,7 +9,11 @@ export const BookDataProvider = ({ children }) => {
     const [bookItems, setBookItems] = useState([])
     const [bookFetchError, setBookFetchError] = useState(null);
     const [isBookLoading, setIsBookLoading] = useState(false);
+    const [search, setSearch] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
 
+    //BookItems is going to maintain all the records received from API
+    //this useEffect is effective only on load that is on empty data == []
     useEffect(() => {
       setBookFetchError(null);
       setIsBookLoading(true);
@@ -34,31 +38,28 @@ export const BookDataProvider = ({ children }) => {
     }, []);
 
 
-    // const [search, setSearch] = useState('');
-    // const [searchResults, setSearchResults] = useState([]);
+    /*this useEffect is effective only when search and bookItems available
+      search is set by BookSearch component via setSearch
+      here bookItems is filtered based on search and value updated to searchResults
+      searchResults is actualy used in UI*/
+    useEffect(() => {
+      //console.log(bookItems)
+        const filteredResults = bookItems?.filter((book) =>
+            ((book.bookName).toLowerCase()).includes(search.toLowerCase())
+            || ((book.bookCategory).toLowerCase()).includes(search.toLowerCase())
+          );
 
-    //const { data, fetchError, isLoading } = useAxiosFetch('http://localhost:3500/posts');
+        setSearchResults(filteredResults.reverse());
 
-    // useEffect(() => {
-    //     setPosts(data);
-    // }, [])
-
-    // useEffect(() => {
-    //     const filteredResults = posts.filter((post) =>
-    //         ((post.body).toLowerCase()).includes(search.toLowerCase())
-    //         || ((post.title).toLowerCase()).includes(search.toLowerCase()));
-
-    //     setSearchResults(filteredResults.reverse());
-    // }, [posts, search])
+    }, [bookItems, search])
 
     return (
         <BookDataContext.Provider value={{
-            // search, setSearch,
-            // searchResults, fetchError, isLoading,
-            // posts, setPosts
             bookItems, setBookItems,
             bookFetchError, setBookFetchError,
-            isBookLoading, setIsBookLoading
+            isBookLoading, setIsBookLoading,
+            search, setSearch,
+            searchResults, setSearchResults
         }}>
             {children}
         </BookDataContext.Provider>

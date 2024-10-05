@@ -6,6 +6,7 @@ const fetchDelete = async(url = '') => {
 
     try {
         const response = await fetch(url, deleteOptions);
+        console.log(response);
         if(!response.ok)
             throw Error('unsuccessfull request');
     } catch(err) {

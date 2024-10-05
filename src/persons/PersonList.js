@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import PersonDataContext from '../shared/context/PersonDataContext';
 import PersonSearch from './PersonSearch';
+import { apiPersonEndPoint } from '../shared/uiConstant';
 
 const PersonList = () => {
 
-    const API_URL = 'http://localhost:5102/api/person';
     const { personItems, setPersonItems, personFetchError, setPersonFetchError, isPersonLoading, setIsPersonLoading,
       search, setSearch, searchResults, setSearchResults} = useContext(PersonDataContext);
 
@@ -17,7 +17,7 @@ const PersonList = () => {
     const handleDelete = async (personId) => {
       setPersonDeleteError(null);
       try {
-        const deleteRequestUrl = `${API_URL}/${personId}`;
+        const deleteRequestUrl = `${apiPersonEndPoint}/${personId}`;
         await axiosBase.delete(deleteRequestUrl);
         const newItems = personItems.filter(item => item.personId !== personId);
         setPersonItems(newItems);

@@ -3,12 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaSave, FaBackspace } from "react-icons/fa";
 import fetchPut from "../shared/apiFetch/fetchPut";
 import BookDataContext from "../shared/context/BookDataContext";
+import { apiBookEndPoint } from "../shared/uiConstant";
 
 const BookEdit = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const API_URL = 'http://localhost:5102/api/book';
 
     const {bookItems, setBookItems} = useContext(BookDataContext);
     const selectedBook = bookItems.find(item => (item.bookId).toString() === id);
@@ -30,7 +30,7 @@ const BookEdit = () => {
             setEditEdition(selectedBook.edition);
             setEditPrice(selectedBook.price);
             setEditImage(selectedBook.image);
-            console.log('Call on useEffect to set values')
+            //console.log('Call on useEffect to set values from BookEdit');
         }
     }, [selectedBook, setEditBookName, setEditBookCategory, setEditEdition, setEditPrice, setEditImage])
 
@@ -45,9 +45,10 @@ const BookEdit = () => {
         updatedBook.edition = editEdition;
         updatedBook.price = editPrice;
         updatedBook.image = editImage;
-        //console.log(selectedBook, updatedBook);
+        
+        console.log(updatedBook);
 
-        const updateRequestUrl = `${API_URL}/${id}`;
+        const updateRequestUrl = `${apiBookEndPoint}/${id}`;
         try {
             await fetchPut(updateRequestUrl, updatedBook);
             setBookItems(bookItems.map(post => post.bookId === updatedBook.bookId ? { ...updatedBook } : post));

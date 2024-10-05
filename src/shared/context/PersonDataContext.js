@@ -1,11 +1,11 @@
 import { createContext, useState, useEffect } from 'react';
 import axiosBase from '../apiAxios/axiosBase';
+import { apiPersonEndPoint } from '../uiConstant';
 //import useAxiosFetch from '../hooks/useAxiosFetch';
 
 const PersonDataContext = createContext({});
 
 export const PersonDataProvider = ({ children }) => {
-    const API_URL = 'http://localhost:5102/api/person';
     const [personItems, setPersonItems] = useState([]);
     const [personFetchError, setPersonFetchError] = useState(null);
     const [isPersonLoading, setIsPersonLoading] = useState(false);
@@ -18,7 +18,7 @@ export const PersonDataProvider = ({ children }) => {
         const fetchItems = async () => {
           try {
             //console.log('--> Call to PersonDataProvider.useEffect to load setPersonItems');
-            const result = await axiosBase.get(API_URL);
+            const result = await axiosBase.get(apiPersonEndPoint);
             setPersonItems(result.data);
           } catch (err) {
             //console.log('--> Call to PersonDataProvider.useEffect catch error');

@@ -4,9 +4,9 @@ import { FaTrashAlt, FaEdit } from 'react-icons/fa';
 import fetchDelete from '../shared/apiFetch/fetchDelete';
 import BookDataContext from '../shared/context/BookDataContext';
 import BookSearch from './BookSearch';
+import { apiBookEndPoint } from '../shared/uiConstant';
 
 const BookList = () => {
-    const API_URL = 'http://localhost:5102/api/book';
     const { 
       bookItems, setBookItems, bookFetchError, setBookFetchError, isBookLoading, setIsBookLoading,
       search, setSearch, searchResults, setSearchResults
@@ -18,7 +18,7 @@ const BookList = () => {
 
       setBookDeleteError(null);
       try {
-        const deleteRequestUrl = `${API_URL}/${bookId}`;
+        const deleteRequestUrl = `${apiBookEndPoint}/${bookId}`;
         await fetchDelete(deleteRequestUrl);
         const newItems = bookItems.filter(item => item.bookId !== bookId);
         setBookItems(newItems);

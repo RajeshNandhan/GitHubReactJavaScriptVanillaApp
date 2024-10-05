@@ -3,10 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaSave, FaBackspace } from "react-icons/fa";
 import axiosBase from "../shared/apiAxios/axiosBase";
 import PersonDataContext from '../shared/context/PersonDataContext';
+import { apiPersonEndPoint } from "../shared/uiConstant";
 
 const PersonEdit = () => {
     const { id } = useParams();
-    const API_URL = 'http://localhost:5102/api/person';
     const navigate = useNavigate();
     const {personItems, setPersonItems} = useContext(PersonDataContext);
     const selectedPerson = personItems.find(item => (item.personId).toString() === id);
@@ -37,7 +37,8 @@ const PersonEdit = () => {
         try {
             //console.log('--> Call to handleSaveClick to call axiosBase.put');
             //const datetime = format(new Date(), 'MMMM dd, yyyy pp');
-            const updateRequestUrl = `${API_URL}/${id}`;
+            console.log(personItem)
+            const updateRequestUrl = `${apiPersonEndPoint}/${id}`;
             await axiosBase.put(updateRequestUrl, personItem);
             setPersonItems(personItems.map(post => post.personId === personItem.personId ? { ...personItem } : post));
             setPersonItem(null)

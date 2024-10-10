@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
 import axiosBase from '../apiAxios/axiosBase';
-import { apiPersonEndPoint } from '../uiConstant';
 //import useAxiosFetch from '../hooks/useAxiosFetch';
 
 const PersonDataContext = createContext({});
@@ -17,8 +16,10 @@ export const PersonDataProvider = ({ children }) => {
         setPersonFetchError(null);
         const fetchItems = async () => {
           try {
+            const getRequestUrl = `person`;
             //console.log('--> Call to PersonDataProvider.useEffect to load setPersonItems');
-            const result = await axiosBase.get(apiPersonEndPoint);
+            /*axiosBase is alreday set with base url for additional service*/
+            const result = await axiosBase.get(getRequestUrl);
             setPersonItems(result.data);
           } catch (err) {
             //console.log('--> Call to PersonDataProvider.useEffect catch error');
@@ -52,7 +53,6 @@ export const PersonDataProvider = ({ children }) => {
         );
 
         setSearchResults(results);
-        //console.log(results)
 
     }, [personItems, search])
 

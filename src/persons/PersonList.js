@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import PersonDataContext from '../shared/context/PersonDataContext';
 import PersonSearch from './PersonSearch';
-import { apiPersonEndPoint } from '../shared/uiConstant';
 
 const PersonList = () => {
 
@@ -17,7 +16,8 @@ const PersonList = () => {
     const handleDelete = async (personId) => {
       setPersonDeleteError(null);
       try {
-        const deleteRequestUrl = `${apiPersonEndPoint}/${personId}`;
+        const deleteRequestUrl = `person/${personId}`;
+        /*axiosBase is alreday set with base url for additional service*/
         await axiosBase.delete(deleteRequestUrl);
         const newItems = personItems.filter(item => item.personId !== personId);
         setPersonItems(newItems);

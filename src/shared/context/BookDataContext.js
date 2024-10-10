@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import fetchGet from '../apiFetch/fetchGet';
-import { apiBookEndPoint } from '../uiConstant';
+import { Environments } from '../environment/environment';
 //import useAxiosFetch from '../hooks/useAxiosFetch';
 
 const BookDataContext = createContext({});
@@ -21,7 +21,8 @@ export const BookDataProvider = ({ children }) => {
       const fetchItems = async () => {
         try {
           //console.log('--> Call to BookDataProvider.useEffect to load setBookItems');
-          const listItems = await fetchGet(apiBookEndPoint);
+          const getRequestUrl = `${Environments.apiAdditionalServiceEndPoint}book`;
+          const listItems = await fetchGet(getRequestUrl);
           setBookItems(listItems);
         } catch (err) {
           //console.log('--> Call to PersonDataProvider.useEffect catch error');
@@ -43,7 +44,6 @@ export const BookDataProvider = ({ children }) => {
       here bookItems is filtered based on search and value updated to searchResults
       searchResults is actualy used in UI*/
     useEffect(() => {
-        console.log(bookItems)
         const filteredResults = bookItems?.filter((book) =>
             ((book.bookName).toLowerCase()).includes(search.toLowerCase())
             || ((book.bookCategory).toLowerCase()).includes(search.toLowerCase())

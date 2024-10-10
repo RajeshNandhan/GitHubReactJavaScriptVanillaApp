@@ -1,42 +1,50 @@
-REACT
-
-https://www.youtube.com/watch?v=SqcY0GlETPk
-
-https://www.youtube.com/watch?v=bMknfKXIFA8
-
-https://www.youtube.com/watch?v=lAFbKzO-fss&t=1s
-
-KEY
-
-useState, useRef, useEffect, fetch, asyn&await
-
-CURRENT
-https://www.youtube.com/watch?v=RVFAyFWO4go
-7:57
-
-
-JavaScript Higher Order Functions
-https://www.geeksforgeeks.org/javascript-higher-order-functions/
-
-* 1. Higher-order function approach involves passing a function (callback) as an argument to another function
-* 2. Higher-order functions can also return new functions as return value.
-* 3. It does not mutate the original value
-
-Step 1 - create new react app
+Step 1 - Create a new react application using below command
 
 npx create-react-app my-react-app
 
-Step 2 -
+Step 2 - start the react application 
 
 cd my-react-app
-
-Step 2 -
 
 npm start
 
 
+Step 3 - axios - Make http requests from node.js
 
----------------------------------
+npm install axios
+
+Step 4 - date-fns - Provides toolset for manipulating JavaScript dates in a browser & Node.js
+
+npm install date-fns
+
+Step 5 - react-icons - Include popular icons in your React projects
+
+npm install react-icons
+
+Step 6 - react-router-dom - Package contains bindings for using React Router in web applications
+
+npm i react-router-dom
+
+
+STEP 7 - Dotenv module loads environment variables from a .env file into process.env
+
+npm i dotenv --save
+
+"start": "npm run dev",
+"dev": "PORT=6102 NODE_ENV=development node server.js"
+Add file environment\development.env
+do configuration in server.js
+
+STEP 8 - Passing multiple environment variable is possible only with "cross-env" module, cross-env is a cross platform
+
+Note - ""dev": "PORT=6102 NODE_ENV=development node server.js"" will not work with window os without "cross-env"
+
+npm install cross-env --save-dev
+"start": "npm run dev",
+"dev": "cross-env NODE_ENV=development PORT=6102 node server.js"
+
+
+---------------------------------------------
 
 REACT VISUAL STUDIO CODE EXTEMTION
 
@@ -44,22 +52,20 @@ Ctrl + ALt + R
 
 rafce - create a arrow function with ES7
 
----------------------------------
+---------------------------------------------
+JSON Server
+
+npx json-server -p 3500 -w data/db.json
+
+---------------------------------------------
+to do
 
 npm uninstall   "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "web-vitals": "^2.1.4"
 
-    for easypz
+---------------------------------------------
 
-    npm install easy-peasy
+npm install easy-peasy
 
----------------------------------
-Review React
-
-    https://www.youtube.com/watch?v=s2skans2dP4
-
----------------------------------
-
-npx json-server -p 3500 -w data/db.json

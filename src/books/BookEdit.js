@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaSave, FaBackspace } from "react-icons/fa";
 import fetchPut from "../shared/apiFetch/fetchPut";
 import BookDataContext from "../shared/context/BookDataContext";
-import { apiBookEndPoint } from "../shared/uiConstant";
+import { Environments } from "../shared/environment/environment"
 
 const BookEdit = () => {
 
@@ -46,9 +46,7 @@ const BookEdit = () => {
         updatedBook.price = editPrice;
         updatedBook.image = editImage;
         
-        console.log(updatedBook);
-
-        const updateRequestUrl = `${apiBookEndPoint}/${id}`;
+        const updateRequestUrl = `${Environments.apiAdditionalServiceEndPoint}book/${id}`;
         try {
             await fetchPut(updateRequestUrl, updatedBook);
             setBookItems(bookItems.map(post => post.bookId === updatedBook.bookId ? { ...updatedBook } : post));

@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaSave, FaBackspace } from "react-icons/fa";
 import axiosBase from "../shared/apiAxios/axiosBase";
 import PersonDataContext from '../shared/context/PersonDataContext';
-import { apiPersonEndPoint } from "../shared/uiConstant";
 
 const PersonEdit = () => {
     const { id } = useParams();
@@ -37,9 +36,9 @@ const PersonEdit = () => {
         try {
             //console.log('--> Call to handleSaveClick to call axiosBase.put');
             //const datetime = format(new Date(), 'MMMM dd, yyyy pp');
-            console.log(personItem)
-            const updateRequestUrl = `${apiPersonEndPoint}/${id}`;
-            await axiosBase.put(updateRequestUrl, personItem);
+            const updateRequestUrl = `person/${id}`;
+            /*axiosBase is alreday set with base url for additional service*/
+            const result = await axiosBase.put(updateRequestUrl, personItem);
             setPersonItems(personItems.map(post => post.personId === personItem.personId ? { ...personItem } : post));
             setPersonItem(null)
             navigate('/person');

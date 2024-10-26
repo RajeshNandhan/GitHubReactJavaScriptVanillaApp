@@ -1,3 +1,16 @@
+Notes
+
+1. This project uses both fetch and axios for API calls
+2. This project creates BookDataContext, PersonDataContext using reacts createContext
+3. In dataContext it has the implementation for fetchItems, search for book and person and shared across pages.
+4. using useEffect fetchItems called on load and search called on search value change from the dataContext
+5. dataContext also exposes bookItems, setBookItems, personItems, setPersonItems
+     and all other realated error and status useState to pages to consume
+6. PersonDataProvider and BookDataProvider is configred or injected from app.js to pages
+
+
+===============================================================================
+
 Step 1 - Create a new react application using below command
 
 npx create-react-app my-react-app
@@ -42,30 +55,3 @@ Note - ""dev": "PORT=6102 NODE_ENV=development node server.js"" will not work wi
 npm install cross-env --save-dev
 "start": "npm run dev",
 "dev": "cross-env NODE_ENV=development PORT=6102 node server.js"
-
-
----------------------------------------------
-
-REACT VISUAL STUDIO CODE EXTEMTION
-
-Ctrl + ALt + R
-
-rafce - create a arrow function with ES7
-
----------------------------------------------
-JSON Server
-
-npx json-server -p 3500 -w data/db.json
-
----------------------------------------------
-to do
-
-npm uninstall   "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "web-vitals": "^2.1.4"
-
----------------------------------------------
-
-npm install easy-peasy
-
